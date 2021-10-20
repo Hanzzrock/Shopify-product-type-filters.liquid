@@ -1,0 +1,163 @@
+{% if collection.all_types.size != 1 %}
+<div class="accordion_head">Filter <span class="plusminus">+</span>
+</div>
+<div class="accordion_body" style="display: none;">
+<div class="column" style="">
+  <ul> 
+      
+   <h3>HAIR PRODUCT TYPE</h3>
+
+      {% for product_type in collections['all'].all_types %}
+    {% if product_type == blank %}{% continue %}{% endif %}
+      <h3 {% if collection.current_type == product_type %} class="active" {% endif %}>
+              <div class="fliters">
+
+              {{ product_type | link_to_type  }} 
+        </div>
+            </h3>
+      
+      {% for tag in type %} {% if current_tags contains tag %}
+        <li class="active" data-tag="{{tag | handleize}}">{{ tag | append: '<span class="x">×</span>' | link_to_remove_tag: tag }}</li>
+        {% else %}
+        <li data-tag="{{tag | handleize}}">{{ tag | link_to_add_tag: tag }}</li>
+        {% endif %} {% endfor %} {% endfor %}
+    
+
+  </ul>
+    </div>
+
+
+  
+</div>
+{% endif %}
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    Shopify.queryParams = {};
+    if (location.search.length) {
+        for (var aKeyValue, i = 0, aCouples = location.search.substr(1).split('&'); i < aCouples.length; i++) { aKeyValue = aCouples[i].split('='); if (aKeyValue.length > 1) {
+                Shopify.queryParams[decodeURIComponent(aKeyValue[0])] = decodeURIComponent(aKeyValue[1]);
+            }
+        }
+    }
+ 
+    jQuery('#SortBy')
+        .val('{{ collection.sort_by | default: collection.default_sort_by }}')
+        .bind('change', function () {
+            Shopify.queryParams.sort_by = jQuery(this).val();
+            location.search = jQuery.param(Shopify.queryParams);
+        }
+        );
+ 
+    jQuery(".accordion_head").click(function () {
+        if (jQuery('.accordion_body').is(':visible')) {
+            jQuery(".accordion_body").slideUp(300);
+            jQuery(".plusminus").text('+');
+        }
+        if (jQuery(this).next(".accordion_body").is(':visible')) {
+            jQuery(this).removeClass('show');
+            jQuery(this).addClass('close');
+            jQuery(this).next(".accordion_body").removeClass('show');
+            jQuery(this).next(".accordion_body").addClass('close');
+            jQuery(this).next(".accordion_body").slideUp(300);
+            jQuery(this).children(".plusminus").text('+');
+        } else {
+            jQuery(this).removeClass('close');
+            jQuery(this).addClass('show');
+            jQuery(this).next(".accordion_body").slideDown(300);
+            jQuery(this).next(".accordion_body").removeClass('close');
+            jQuery(this).next(".accordion_body").addClass('show');
+            jQuery(this).children(".plusminus").text('-');
+        }
+    });
+    jQuery('.accordion_head').trigger('click');
+</script>
+<style>
+    .accordion_head {
+    background-color: #ffa400;
+    color: #2d006a;
+    cursor: pointer;
+    font-family: arial;
+    font-size: 14px;
+    margin: 0 auto;
+    padding: 8px 19px;
+    font-weight: bold;
+    display: inline-block;
+    max-width: 1280px;
+    text-align: left;
+    margin-left: 77px;
+    letter-spacing: 1px;
+    font-family: 'Futura';
+    text-transform: uppercase;
+}
+    .plusminus {
+        float: none;
+    }
+    .accordion_body {
+        border-top: 1px solid #eaeaea;
+        border-bottom: 1px solid #eaeaea;
+        display: inline-block;
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto 20px 83px;
+    }
+    .accordion_body ul {
+        margin: 15px 0;
+        text-align: left;
+    }
+    .accordion_body ul li {
+        display: inline;
+        padding: 0 10px;
+    }
+    .accordion_body ul li.active {
+        font-weight: bold;
+    }
+    .accordion_head.close {
+        
+       
+    }
+  
+  .column {
+  float: left;
+  width: 25%;
+  padding: 10px;
+  height: auto; /* Should be removed. Only for demonstration */
+ border-right: 1px solid #ddd; 
+}
+    .filters-toolbar-wrapper {
+        display: none;
+    }
+  @media screen and (max-width: 767px) {
+  .accordion_head {
+    background-color: #ffa400;
+    color: #2d006a;
+    cursor: pointer;
+    font-family: arial;
+    font-size: 14px;
+    margin: 0 auto;
+    padding: 8px 19px;
+    font-weight: bold;
+    display: inline-block;
+    max-width: 1280px;
+    text-align: left;
+    margin-left: 0;
+    letter-spacing: 1px;
+    font-family: 'Futura';
+    text-transform: uppercase;
+    width: 100%;
+}
+  
+ .accordion_body {
+    border-top: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+    display: inline-block;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto 20px 18px;
+} 
+  }
+ .filters-toolbar__item.size-filter li {
+    display: list-item;
+    margin-left: 13px;
+} 
+</style>
